@@ -4,10 +4,11 @@ An Icy tower inpired game that is built with [KaboomJS](https://kaboomjs.com/).
 
 Works only on PCs.
 
-Still a WIP, even the name is terrrible lol.
+[Live](https://spicytower.netlify.app/)
+
 
 ```
-Status: [Live](here)
+Status: WIP, even the name is terrrible lol.
 ```
 
 ![game](./game.jpg)
