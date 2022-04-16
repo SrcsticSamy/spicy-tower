@@ -1,6 +1,3 @@
-import kaboom from "kaboom"
-
-// initialize context
 kaboom({
   font: "sinko",
   background: [ 5, 5, 5 ]
