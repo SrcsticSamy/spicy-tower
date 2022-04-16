@@ -14,7 +14,7 @@ loadSprite("robbie", "sprites/robbie.png", {
 
 scene("game", () => {
   let playerSpeed = 300;
-  let camSpeed = 90;
+  let camSpeed = 110;
   let jumpPower = 800;
 
   // load assets
@@ -173,13 +173,11 @@ scene("game", () => {
 
   //------------Platforms generate--------------
 
-  //platforms
-
   let highestPlatformY = height();
 
   function producePlatforms() {
     const newPlatform = add([
-      rect(width() / 4 - 50, 40),
+      rect(width() / 4, 40),
       pos(
         width() / 2 + rand(-width() / 4, width() / 4),
         highestPlatformY - 170
@@ -242,8 +240,8 @@ scene("game", () => {
     });
 
     loop(10, () => {
-      //max speed is 220
-      if (camSpeed <= 200) {
+      //max speed is 230
+      if (camSpeed <= 210) {
         camSpeed = camSpeed + 20;
         speed.text = "Speed: " + camSpeed;
         playerSpeed = playerSpeed + 20;
