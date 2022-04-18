@@ -260,34 +260,50 @@ scene("game", () => {
     
     onUpdate(()=>{
       if (mousePos().x > 0 && mousePos().x < width() && mousePos().y > 0 && mousePos().y < height()) {
-        if (mousePos().x < player.worldArea().p1.x) { // left
+        if (mousePos().x > width()/2 && mousePos().x < width()/2 + width()/4) { // left
             player.move(-playerSpeed, 0);
         }
-        else if (mousePos().x > player.worldArea().p2.x) { // right
+        else if (mousePos().x > width()/2 + width()/4) { // right
             player.move(playerSpeed, 0);
+        } else if (mousePos().x < width()/2) {
+
+          if (player.isGrounded()) {
+            player.jump(jumpPower);
+          }
+
         }
     }
     })
 
+    add([
+      text("->", {size: 50}),
+      rect(width()/4 - 10, 50),
+      pos(width()/2 + width()/4, height()-50),
+      origin("topleft"),
+      color(0,0,100),
+      opacity(0.5),
+      fixed()
+    ])
 
-    // moveRightBtn.onTouchStart = () => {
-    //   onTouchStart(() => {
-    //     if (mousePos().y < height() && mousePos().y > 0) {
-    //       if (mousePos().x > width() / 2 && mousePos().x < width()) {
-    //         debug.log("right");
-    //         player.move(playerSpeed, 0);
-    //       } else if (mousePos().x < width() / 2 && mousePos().x > 0) {
-    //         debug.log("left");
-    //         player.move(-playerSpeed, 0);
-    //       } else debug.log("wrong :(");
-    //     }
-    //   });
+    add([
+      text("<-", {size: 50}),
+      rect(width()/4 - 10, 50),
+      pos(width()/2, height()-50),
+      origin("topleft"),
+      color(0,0,100),
+      opacity(0.5),
+      fixed()
+    ])
 
-    //   onTouchEnd(()=>{
-    //     debug.log("done")
-    //   })
-    // };
-      
+    add([
+      text("JUMP", {size: 50}),
+      rect(width()/4 - 10, 50),
+      pos(width()/4, height()-50),
+      origin("top"),
+      color(0,100,0),
+      opacity(0.5),
+      fixed()
+    ])
 
     
   }
@@ -335,4 +351,10 @@ scene("lost", (score) => {
   onMousePress(() => {
     go("game");
   });
+
+  if(isTouch()){
+    onTouchStart(()=>{
+      go("game")
+    })
+  }
 });
