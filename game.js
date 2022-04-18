@@ -38,7 +38,7 @@ scene("game", () => {
 
   const player = add([
     sprite("robbie", { anime: "idle" }),
-    pos(width() / 2, height()),
+    pos(width() / 2, height()-300),
     area(),
     body(),
     z(1000),
@@ -122,7 +122,7 @@ scene("game", () => {
   //to make the camera move upwards
   const camObj = add([
     rect(10, 10),
-    pos(width() / 2, height() / 2),
+    pos(width() / 2, height() / 2 - 200),
     color(0, 0, 0),
     opacity(0),
     origin("center"),
@@ -133,14 +133,14 @@ scene("game", () => {
       camObj.move(0, -camSpeed);
     });
 
-    camPos(camObj.pos);
+    camPos(player.pos);
   });
   //----------------------------------------
 
   //----------------Borders-------------
-  const floor = add([
-    rect(width(), 50),
-    pos(0, height() - 50),
+  add([
+    rect(width(), height()-200),
+    pos(0, height() - 300),
     area(),
     solid(),
     color(255, 0, 0),
@@ -173,14 +173,15 @@ scene("game", () => {
 
   //------------Platforms generate--------------
 
-  let highestPlatformY = height();
+  //first platform height
+  let highestPlatformY = height() - 300;
 
   function producePlatforms() {
     const newPlatform = add([
       rect(width() / 4, 40),
       pos(
-        width() / 2 + rand(-width() / 4, width() / 4),
-        highestPlatformY - 170
+        width() / 2 + rand(-width() / 4, width() / 4), 
+        highestPlatformY - 170  //space between platforms
       ),
       area(),
       color(0, 0, 0),
@@ -195,7 +196,8 @@ scene("game", () => {
     }
   }
 
-  for (let i = 0; i < 10; i++) {
+  //create first 10 platforms
+  for (let i = 0; i <= 10; i++) {
     producePlatforms();
   }
 
@@ -211,7 +213,7 @@ scene("game", () => {
     }
 
     //destroy unused platforms for performance
-    if (plt.pos.y > camPos().y + 500 || plt.pos.y < camPos.y - 500) {
+    if (plt.pos.y > camPos().y + 500 ) {
       destroy(plt);
     }
   });
@@ -220,7 +222,7 @@ scene("game", () => {
 
   const countdown = add([
     text("3", { size: 100 }),
-    pos(center()),
+    pos(width()/2, height()/2 - 200),
     origin("center"),
     { value: 3 },
   ]);
@@ -252,9 +254,47 @@ scene("game", () => {
   onCollide("wall", "robbie", () => {
     player.doubleJump(800);
   });
+
+
+  if(isTouch()){
+
+    // const moveRightBtn = add([
+    //   rect(width()/4, 50),
+    //   pos(width()/2 + 100, height()-50),
+    //   origin("center"),
+    //   fixed(),
+    //   z(1001),
+    //   color(0, 0, 255),
+    // ])
+
+    // const moveLeftBtn = add([
+    //   rect(width()/4, 50),
+    //   pos(width()/2, height()-50),
+    //   origin("center"),
+    //   fixed(),
+    //   z(1001),
+    //   color(0, 255, 0),
+    // ])
+
+    onMouseDown(()=>{
+      if(mousePos().x > camPos().x/2 && mousePos().x < camPos().x){
+        debug.log("right")
+      } else if(mousePos().x < width()/2 && mousePos().x > 0){
+        debug.log("left")
+      } else debug.log("wrong :(")
+    })
+
+  }
+
+
+
 });
 
 go("game");
+
+
+
+
 
 //game over scene
 scene("lost", (score) => {
@@ -267,26 +307,26 @@ scene("lost", (score) => {
     setData("highScore", score.value);
   }
   add([
-    text("Press any key to play again.", { size: 20, width: width() / 4 }),
+    text("Click any where to play again.", { size: isTouch()? width()/20 : 30, width: width() / 2 }),
     pos(width() / 2, height() / 2 - 200),
     origin("center"),
   ]);
 
-  add([text("Game Over", { size: 80 }), pos(center()), origin("center")]);
+  add([text("Game Over", { size: isTouch()? width()/10 : 80 }), pos(center()), origin("center")]);
 
   add([
-    text(`Score: ${score.value}`, { size: 40 }),
+    text(`Score: ${score.value}`, { size: isTouch()? width()/20 : 30 }),
     pos(width() / 2, height() / 2 + 100),
     origin("center"),
   ]);
 
   add([
-    text(`Your Highest: ${highScore}`, { size: 40 }),
+    text(`Your Highest: ${highScore}`, { size: isTouch()? width()/20 : 30 }),
     pos(width() / 2, height() / 2 + 180),
     origin("center"),
   ]);
 
-  onKeyPress(() => {
+  onMousePress(() => {
     go("game");
   });
 });
