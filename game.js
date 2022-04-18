@@ -154,7 +154,7 @@ scene("game", () => {
     area(),
     solid(),
     color(0, 0, 0),
-    origin("bot"),
+    origin(isTouch()? "botright" : "bot"),
     z(10),
     "wall",
   ]);
@@ -165,7 +165,7 @@ scene("game", () => {
     area(),
     solid(),
     color(0, 0, 0),
-    origin("bot"),
+    origin(isTouch()? "botleft" : "bot"),
     z(10),
     "wall",
   ]);
@@ -256,8 +256,7 @@ scene("game", () => {
   });
 
 
-  if(isTouch()){
-
+  if (isTouch()) {
     // const moveRightBtn = add([
     //   rect(width()/4, 50),
     //   pos(width()/2 + 100, height()-50),
@@ -276,21 +275,20 @@ scene("game", () => {
     //   color(0, 255, 0),
     // ])
 
-    onTouchStart(()=>{
-      
-      if(mousePos().x > width()/2 && mousePos().x < width()){
-        debug.log("right")
-        player.onUpdate(()=>{
-          player.move(playerSpeed, 0)
-        })
-      } else if(mousePos().x < width()/2 && mousePos().x > 0){
-        debug.log("left")
-        player.onUpdate(()=>{
-          player.move(-playerSpeed, 0)
-        })
-      } else debug.log("wrong :(")
+    onUpdate(()=>{
+      if (mousePos().y < height() && mousePos().y > 0) {
+        if (mousePos().x > width() / 2 && mousePos().x < width()) {
+          debug.log("right");
+          
+          player.move(playerSpeed, 0);
+        } else if (mousePos().x < width() / 2 && mousePos().x > 0) {
+          debug.log("left");
+          player.move(-playerSpeed, 0);
+        } else debug.log("wrong :(");
+      }
     })
 
+    
   }
 
 
