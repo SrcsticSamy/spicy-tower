@@ -256,7 +256,7 @@ scene("game", () => {
   });
 
 
-  if(!isTouch()){
+  if(isTouch()){
 
     // const moveRightBtn = add([
     //   rect(width()/4, 50),
@@ -276,11 +276,18 @@ scene("game", () => {
     //   color(0, 255, 0),
     // ])
 
-    onMouseDown(()=>{
+    onTouchStart(()=>{
+      
       if(mousePos().x > width()/2 && mousePos().x < width()){
         debug.log("right")
+        player.onUpdate(()=>{
+          player.move(playerSpeed, 0)
+        })
       } else if(mousePos().x < width()/2 && mousePos().x > 0){
         debug.log("left")
+        player.onUpdate(()=>{
+          player.move(-playerSpeed, 0)
+        })
       } else debug.log("wrong :(")
     })
 
