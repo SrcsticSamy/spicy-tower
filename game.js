@@ -133,7 +133,7 @@ scene("game", () => {
       camObj.move(0, -camSpeed);
     });
 
-    camPos(player.pos);
+    camPos(camObj.pos);
   });
   //----------------------------------------
 
@@ -255,38 +255,39 @@ scene("game", () => {
     player.doubleJump(800);
   });
 
-
+  //handle touch devices (WIP)
   if (isTouch()) {
-    // const moveRightBtn = add([
-    //   rect(width()/4, 50),
-    //   pos(width()/2 + 100, height()-50),
-    //   origin("center"),
-    //   fixed(),
-    //   z(1001),
-    //   color(0, 0, 255),
-    // ])
-
-    // const moveLeftBtn = add([
-    //   rect(width()/4, 50),
-    //   pos(width()/2, height()-50),
-    //   origin("center"),
-    //   fixed(),
-    //   z(1001),
-    //   color(0, 255, 0),
-    // ])
-
+    
     onUpdate(()=>{
-      if (mousePos().y < height() && mousePos().y > 0) {
-        if (mousePos().x > width() / 2 && mousePos().x < width()) {
-          debug.log("right");
-          
-          player.move(playerSpeed, 0);
-        } else if (mousePos().x < width() / 2 && mousePos().x > 0) {
-          debug.log("left");
-          player.move(-playerSpeed, 0);
-        } else debug.log("wrong :(");
-      }
+      if (mousePos().x > 0 && mousePos().x < width() && mousePos().y > 0 && mousePos().y < height()) {
+        if (mousePos().x < player.worldArea().p1.x) { // left
+            player.move(-playerSpeed, 0);
+        }
+        else if (mousePos().x > player.worldArea().p2.x) { // right
+            player.move(playerSpeed, 0);
+        }
+    }
     })
+
+
+    // moveRightBtn.onTouchStart = () => {
+    //   onTouchStart(() => {
+    //     if (mousePos().y < height() && mousePos().y > 0) {
+    //       if (mousePos().x > width() / 2 && mousePos().x < width()) {
+    //         debug.log("right");
+    //         player.move(playerSpeed, 0);
+    //       } else if (mousePos().x < width() / 2 && mousePos().x > 0) {
+    //         debug.log("left");
+    //         player.move(-playerSpeed, 0);
+    //       } else debug.log("wrong :(");
+    //     }
+    //   });
+
+    //   onTouchEnd(()=>{
+    //     debug.log("done")
+    //   })
+    // };
+      
 
     
   }
