@@ -256,7 +256,7 @@ scene("game", () => {
   });
 
 
-  if(isTouch()){
+  if(!isTouch()){
 
     // const moveRightBtn = add([
     //   rect(width()/4, 50),
@@ -277,7 +277,7 @@ scene("game", () => {
     // ])
 
     onMouseDown(()=>{
-      if(mousePos().x > camPos().x/2 && mousePos().x < camPos().x){
+      if(mousePos().x > width()/2 && mousePos().x < width()){
         debug.log("right")
       } else if(mousePos().x < width()/2 && mousePos().x > 0){
         debug.log("left")
