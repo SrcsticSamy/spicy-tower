@@ -282,7 +282,7 @@ scene("game", () => {
 
     
     onTouchMove((id, p)=>{
-      if(p.x>width()/2 && p.x<width() && p.y<height() && p.y>0){
+      if(p.x>0 && p.x<width() && p.y<height() && p.y>0){
         cntrl.pos.x = p.x-20         
            
       }
