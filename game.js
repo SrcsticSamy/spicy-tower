@@ -311,11 +311,11 @@ scene("game", () => {
         }
 
         onTouchMove(()=>{
-          debug.log("dragging")
+          debug.log(mousePos().x)
         })
 
         onTouchEnd(()=>{
-          debug.log("done dragging")
+          debug.log(mousePos().x)
 
         })
     }
