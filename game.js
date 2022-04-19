@@ -314,9 +314,10 @@ scene("game", () => {
           debug.log("dragging")
         })
 
-        if(isMouseDown()){
-          debug.log("done")
-        }
+        onTouchEnd(()=>{
+          debug.log("done dragging")
+
+        })
     }
     })
 
