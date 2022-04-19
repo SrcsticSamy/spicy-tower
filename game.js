@@ -138,7 +138,7 @@ scene("game", () => {
 
   camObj.onUpdate(() => {
     wait(3, () => {
-      camObj.move(0, -camSpeed);
+      //camObj.move(0, -camSpeed);
     });
 
     camPos(camObj.pos);
@@ -272,22 +272,42 @@ scene("game", () => {
   //handle touch devices (WIP)
   if (isTouch()) {
 
+    const cntrl = add([
+      rect(30, 30),
+      pos(width()/2, height()-100),
+      origin("center"),
+      fixed()
+    ])
+
     
+    onTouchMove((id, p)=>{
+      if(p.x>0 && p.x<width() && p.y<height() && p.y>0){
+        cntrl.pos.x = p.x-20            
+      }
+    })
+
+    onTouchEnd(()=>{
+      cntrl.pos.x = width()/2
+    })
 
       onUpdate(()=>{
 
-        
-
-        onTouchMove((id, p)=>{
-          if(p.x>0 && p.x<width() && p.y<height() && p.y>0){
-            player.pos.x = p.x-20
-            if (player.isGrounded()) {
-              player.jump(jumpPower);
-            }
+        if(cntrl.pos.x > width()/2){
+          player.flipX(false);
+          player.move(playerSpeed, 0);
+      
+          if (player.curAnim() !== "run") {
+            player.play("run");
           }
-        })
 
-        
+        } else if (cntrl.pos.x < width()/2){
+          player.flipX(true);
+          player.move(-playerSpeed, 0);
+      
+          if (player.curAnim() !== "run") {
+            player.play("run");
+          }
+        }
 
 
       
@@ -334,28 +354,28 @@ scene("game", () => {
 
 
     
-    add([
-      pos(width()/2 + width()/4, height()-50),
-      origin("botleft"),
-      fixed(),  
-      sprite("rightBtn"),
-      "leftbtn"
-    ])
+    // add([
+    //   pos(width()/2 + width()/4, height()-50),
+    //   origin("botleft"),
+    //   fixed(),  
+    //   sprite("rightBtn"),
+    //   "leftbtn"
+    // ])
 
-    add([
-      pos(width()/2, height()-50),
-      origin("botleft"),
-      fixed(),
-      sprite("leftBtn")
-    ])
+    // add([
+    //   pos(width()/2, height()-50),
+    //   origin("botleft"),
+    //   fixed(),
+    //   sprite("leftBtn")
+    // ])
 
-    add([
-      pos(width()/4, height()-50),
-      origin("bot"),
-      fixed(),
-      sprite("jumpBtn"),
+    // add([
+    //   pos(width()/4, height()-50),
+    //   origin("bot"),
+    //   fixed(),
+    //   sprite("jumpBtn"),
       
-    ])
+    // ])
 
     
   }
