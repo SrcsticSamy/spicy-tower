@@ -23,7 +23,7 @@ scene("game", () => {
   let playerSpeed = 300;
   let camSpeed = 100;
   let jumpPower = 800;
-  let maxSpeed = isTouch()? 160 : 220
+  let maxSpeed = isTouch() ? 160 : 220;
 
   // load assets
   const score = add([
@@ -45,7 +45,7 @@ scene("game", () => {
 
   const player = add([
     sprite("robbie", { anime: "idle" }),
-    pos(width() / 2, height()-550),
+    pos(width() / 2, height() - 550),
     area(),
     body(),
     z(1000),
@@ -147,7 +147,7 @@ scene("game", () => {
 
   //----------------Borders-------------
   add([
-    rect(width(), height()-500),
+    rect(width(), height() - 500),
     pos(0, height() - 700),
     area(),
     solid(),
@@ -162,7 +162,7 @@ scene("game", () => {
     area(),
     solid(),
     color(0, 0, 0),
-    origin(isTouch()? "botright" : "bot"),
+    origin(isTouch() ? "botright" : "bot"),
     z(10),
     "wall",
   ]);
@@ -173,7 +173,7 @@ scene("game", () => {
     area(),
     solid(),
     color(0, 0, 0),
-    origin(isTouch()? "botleft" : "bot"),
+    origin(isTouch() ? "botleft" : "bot"),
     z(10),
     "wall",
   ]);
@@ -188,8 +188,8 @@ scene("game", () => {
     const newPlatform = add([
       rect(width() / 4, 40),
       pos(
-        width() / 2 + rand(-width() / 4, width() / 4), 
-        highestPlatformY - 170  //space between platforms
+        width() / 2 + rand(-width() / 4, width() / 4),
+        highestPlatformY - 170 //space between platforms
       ),
       area(),
       color(0, 0, 0),
@@ -221,7 +221,7 @@ scene("game", () => {
     }
 
     //destroy unused platforms for performance
-    if (plt.pos.y > camPos().y + 500 ) {
+    if (plt.pos.y > camPos().y + 500) {
       destroy(plt);
     }
   });
@@ -230,7 +230,7 @@ scene("game", () => {
 
   const countdown = add([
     text("3", { size: 100 }),
-    pos(width()/2, height()/2 - 200),
+    pos(width() / 2, height() / 2 - 200),
     origin("center"),
     { value: 3 },
   ]);
@@ -260,77 +260,67 @@ scene("game", () => {
   });
 
   onCollide("wall", "robbie", () => {
-    if(!isTouch()){
+    if (!isTouch()) {
       player.doubleJump(800);
     } else {
-      player.move(0, 0)
-      player.frame = 0
-      player.stop()
+      player.move(0, 0);
+      player.frame = 0;
+      player.stop();
     }
   });
 
   //handle touch devices (WIP)
   if (isTouch()) {
-
     const cntrl = add([
       circle(20),
-      pos(width()/2, height()-170),
+      pos(width() / 2, height() - 250),
       origin("center"),
       opacity(1),
       outline(5),
-      fixed()
-    ])
+      fixed(),
+    ]);
 
-    
-    onTouchMove((id, p)=>{
-      if(p.x>0 && p.x<width() && p.y<height()-200 && p.y>0){
-        cntrl.pos.x = p.x
+
+    onTouchMove((id, p) => {
+      if (p.x > 0 && p.x < width() && p.y < height() - 200 && p.y > 0) {
+        cntrl.pos.x = p.x - 20;
       }
-    })
+    });
 
-    onTouchEnd((id, p)=>{
-      cntrl.pos.x = width()/2
-      player.frame = 0
-      player.stop()
-    })
-
-    //handle jump when lower part of the screen is pressed
-    onTouchStart((id, p)=>{
-      if(p.y>height()-100 && p.x<height()){
+    //handle jump when lower part of screen is pressed
+    onTouchStart((id, p) => {
+      if (p.y > height() - 100 && p.x < height()) {
         if (player.isGrounded()) {
           player.jump(jumpPower);
         }
       }
-    })
+    });
 
-      onUpdate(()=>{
+    //reset animation and control thingy
+    onTouchEnd(() => {
+      cntrl.pos.x = width() / 2;
+      player.frame = 0;
+      player.stop();
+    });
 
-        if(cntrl.pos.x > width()/2){
-          player.flipX(false);
-          player.move(playerSpeed, 0);
-      
-          if (player.curAnim() !== "run") {
-            player.play("run");
-          }
+    onUpdate(() => {
+      if (cntrl.pos.x > width() / 2) { //run right
+        player.flipX(false);
+        player.move(playerSpeed, 0);
 
-        } else if (cntrl.pos.x < width()/2){
-          player.flipX(true);
-          player.move(-playerSpeed, 0);
-      
-          if (player.curAnim() !== "run") {
-            player.play("run");
-          }
+        if (player.curAnim() !== "run") {
+          player.play("run");
         }
+      } else if (cntrl.pos.x < width() / 2) { //run left
+        player.flipX(true);
+        player.move(-playerSpeed, 0);
 
-
-      
-      
-  })
-
-    
+        if (player.curAnim() !== "run") {
+          player.play("run");
+        }
+      }
+    });
   }
-
-
 });
 
 go("game");
