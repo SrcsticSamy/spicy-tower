@@ -138,7 +138,7 @@ scene("game", () => {
 
   camObj.onUpdate(() => {
     wait(3, () => {
-      //camObj.move(0, -camSpeed);
+      camObj.move(0, -camSpeed);
     });
 
     camPos(camObj.pos);
