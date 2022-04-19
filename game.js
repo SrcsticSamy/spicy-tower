@@ -282,6 +282,7 @@ scene("game", () => {
 
     
     onTouchMove((id, p)=>{
+      debug.log(`move:  ${id}`);
       if(p.x>0 && p.x<width() && p.y<height() && p.y>0){
         cntrl.pos.x = p.x-20         
            
@@ -290,6 +291,8 @@ scene("game", () => {
     })
 
     onTouchStart((id, p)=>{
+      debug.log(`click:  ${id}`);
+
       if(p.y>height()-100 && p.x<height()){
         if (player.isGrounded()) {
           player.jump(jumpPower);
