@@ -11,8 +11,8 @@ Works only on PCs.
 Status: WIP, even the name is terrrible lol.
 ```
 
-![game](./game.jpg)
+![game](./images/game.jpg)
 
-![gameplay](./gameplay.jpg)
+![gameplay](./images/gameplay.jpg)
 
-![game over screen](./gameover.jpg)
+![game over screen](./images/gameover.jpg)

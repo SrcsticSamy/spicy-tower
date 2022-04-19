@@ -12,11 +12,18 @@ loadSprite("robbie", "sprites/robbie.png", {
   },
 });
 
+loadSprite("leftBtn", "sprites/left.png")
+loadSprite("rightBtn", "sprites/right.png")
+loadSprite("jumpBtn", "sprites/jump.png")
+
+loadSprite("wall", "sprites/wall.png")
+
+
 scene("game", () => {
   let playerSpeed = 300;
-  let camSpeed = 110;
+  let camSpeed = 120;
   let jumpPower = 800;
-
+  let maxSpeed = isTouch()? 200 : 220
   // load assets
 
   const score = add([
@@ -38,7 +45,7 @@ scene("game", () => {
 
   const player = add([
     sprite("robbie", { anime: "idle" }),
-    pos(width() / 2, height()-300),
+    pos(width() / 2, height()-500),
     area(),
     body(),
     z(1000),
@@ -122,7 +129,7 @@ scene("game", () => {
   //to make the camera move upwards
   const camObj = add([
     rect(10, 10),
-    pos(width() / 2, height() / 2 - 200),
+    pos(width() / 2, height() / 2 - 500),
     color(0, 0, 0),
     opacity(0),
     origin("center"),
@@ -139,8 +146,8 @@ scene("game", () => {
 
   //----------------Borders-------------
   add([
-    rect(width(), height()-200),
-    pos(0, height() - 300),
+    rect(width(), height()-500),
+    pos(0, height() - 700),
     area(),
     solid(),
     color(255, 0, 0),
@@ -174,7 +181,7 @@ scene("game", () => {
   //------------Platforms generate--------------
 
   //first platform height
-  let highestPlatformY = height() - 300;
+  let highestPlatformY = height() - 700;
 
   function producePlatforms() {
     const newPlatform = add([
@@ -243,7 +250,7 @@ scene("game", () => {
 
     loop(10, () => {
       //max speed is 230
-      if (camSpeed <= 210) {
+      if (camSpeed <= maxSpeed) {
         camSpeed = camSpeed + 20;
         speed.text = "Speed: " + camSpeed;
         playerSpeed = playerSpeed + 20;
@@ -252,19 +259,36 @@ scene("game", () => {
   });
 
   onCollide("wall", "robbie", () => {
-    player.doubleJump(800);
+    if(!isTouch()){
+      player.doubleJump(800);
+    }
   });
 
   //handle touch devices (WIP)
   if (isTouch()) {
-    
-    onUpdate(()=>{
-      if (mousePos().x > 0 && mousePos().x < width() && mousePos().y > 0 && mousePos().y < height()) {
+
+      onUpdate(()=>{
+
+      
+      if (mousePos().x > 0 && mousePos().x < width() && mousePos().y > 3*height()/4 && mousePos().y < height()) {
         if (mousePos().x > width()/2 && mousePos().x < width()/2 + width()/4) { // left
-            player.move(-playerSpeed, 0);
+
+          player.flipX(true);
+          player.move(-playerSpeed, 0);
+      
+          if (player.curAnim() !== "run") {
+            player.play("run");
+          }
+
         }
         else if (mousePos().x > width()/2 + width()/4) { // right
-            player.move(playerSpeed, 0);
+          player.flipX(false);
+          player.move(playerSpeed, 0);
+      
+          if (player.curAnim() !== "run") {
+            player.play("run");
+          }
+
         } else if (mousePos().x < width()/2) {
 
           if (player.isGrounded()) {
@@ -272,37 +296,47 @@ scene("game", () => {
           }
 
         }
+
+        else {
+          player.move(0 ,0)
+          player.frame = 0
+          player.stop()
+
+        }
     }
+
     })
 
+
+    onTouchEnd(()=>{
+      debug.log("stopped")
+    })
+    
+    
+
+    
     add([
-      text("->", {size: 50}),
-      rect(width()/4 - 10, 50),
       pos(width()/2 + width()/4, height()-50),
-      origin("topleft"),
-      color(0,0,100),
+      origin("botleft"),
       opacity(0.5),
-      fixed()
+      fixed(),
+      sprite("rightBtn")
     ])
 
     add([
-      text("<-", {size: 50}),
-      rect(width()/4 - 10, 50),
       pos(width()/2, height()-50),
-      origin("topleft"),
-      color(0,0,100),
+      origin("botleft"),
       opacity(0.5),
-      fixed()
+      fixed(),
+      sprite("leftBtn")
     ])
 
     add([
-      text("JUMP", {size: 50}),
-      rect(width()/4 - 10, 50),
       pos(width()/4, height()-50),
-      origin("top"),
-      color(0,100,0),
+      origin("bot"),
       opacity(0.5),
-      fixed()
+      fixed(),
+      sprite("jumpBtn")
     ])
 
     
