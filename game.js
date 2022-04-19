@@ -319,7 +319,8 @@ scene("game", () => {
 
         onTouchEnd(()=>{
           debug.log(mousePos().x)
-
+          player.frame = 0
+          player.stop()
         })
     }
     })
