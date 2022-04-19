@@ -260,39 +260,51 @@ scene("game", () => {
   });
 
   onCollide("wall", "robbie", () => {
-    if(!isTouch()){
+    // if(!isTouch()){
       player.doubleJump(800);
-    } else {
-      player.move(0, 0)
-      player.frame = 0
-      player.stop()
-    }
+    // } else {
+    //   player.move(0, 0)
+    //   player.frame = 0
+    //   player.stop()
+    // }
   });
 
   //handle touch devices (WIP)
   if (isTouch()) {
 
     const cntrl = add([
-      rect(30, 30),
-      pos(width()/2, height()-100),
+      circle(20),
+      pos(3*width()/4, height()-100),
       origin("center"),
+      outline(5, ),
       fixed()
     ])
 
     
     onTouchMove((id, p)=>{
-      if(p.x>0 && p.x<width() && p.y<height() && p.y>0){
+      if(p.x>width()/2 && p.x<width() && p.y<height() && p.y>0){
         cntrl.pos.x = p.x-20            
+      }
+      
+    })
+
+    onTouchStart((id, p)=>{
+      if(p.x>0 && p.x<width()/2){
+        if (player.isGrounded()) {
+          player.jump(jumpPower);
+        }
       }
     })
 
     onTouchEnd(()=>{
-      cntrl.pos.x = width()/2
+      cntrl.pos.x = 3*width()/4
+      player.frame = 0
+      player.stop()
     })
 
       onUpdate(()=>{
 
-        if(cntrl.pos.x > width()/2){
+        if(cntrl.pos.x > 3*width()/4){
           player.flipX(false);
           player.move(playerSpeed, 0);
       
@@ -300,7 +312,7 @@ scene("game", () => {
             player.play("run");
           }
 
-        } else if (cntrl.pos.x < width()/2){
+        } else if (cntrl.pos.x < 3*width()/4 && cntrl.pos.x > width()/2){
           player.flipX(true);
           player.move(-playerSpeed, 0);
       
