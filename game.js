@@ -23,24 +23,37 @@ scene("game", () => {
   let playerSpeed = 300;
   let camSpeed = 100;
   let jumpPower = 800;
-  let maxSpeed = isTouch() ? 160 : 220;
+  let maxSpeed = isTouch() ? 180 : 220;
 
   // load assets
   const score = add([
     text(`0`, { size: 30 }),
     pos(10, 10),
     fixed(),
-    z(100),
+    z(50),
     { value: 0 },
   ]);
 
-  add([text(`Score`, { size: 20 }), pos(10, 50), fixed(), z(100)]);
+  add([text(`Score`, { size: 20 }), pos(10, 50), fixed(), z(50)]);
+
 
   const speed = add([
-    text(`Speed: ${camSpeed}`, { size: 30 }),
-    pos(width() / 4, 10),
+    text(`0`, { size: 30 }),
+    pos(10, 100),
     fixed(),
+    z(50),
     { value: camSpeed },
+  ]);
+
+  add([text(`Speed`, { size: 20 }), pos(10, 140), fixed(), z(50)]);
+
+
+  const fps = add([
+    text(debug.fps(), { size: 15 }),
+    pos(width()-60, 10),
+    fixed(),
+    z(100),
+    { value: 0 },
   ]);
 
   const player = add([
@@ -186,7 +199,7 @@ scene("game", () => {
 
   function producePlatforms() {
     const newPlatform = add([
-      rect(width() / 4, 40),
+      rect(isTouch()? width() / 4: width() / 4 + 50, 40),
       pos(
         width() / 2 + rand(-width() / 4, width() / 4),
         highestPlatformY - 170 //space between platforms
@@ -194,6 +207,7 @@ scene("game", () => {
       area(),
       color(0, 0, 0),
       origin("center"),
+      z(100),
       color(rand(10, 255), rand(10, 255), rand(10, 255)),
       { passed: false },
       "platform",
@@ -210,8 +224,12 @@ scene("game", () => {
   }
 
   onUpdate("platform", (plt) => {
+
+    //display an FPS counter
+    fps.text = debug.fps() + "FPS"
+
     //makes platforms not solid unless player is above them
-    plt.solid = player.pos.y < plt.pos.y;
+    plt.solid = player.pos.y < plt.pos.y - 15;
 
     //handle score
     if (plt.passed === false && player.pos.y < plt.pos.y) {
@@ -253,24 +271,44 @@ scene("game", () => {
       //max speed is 230
       if (camSpeed <= maxSpeed) {
         camSpeed = camSpeed + 20;
-        speed.text = "Speed: " + camSpeed;
+        speed.text = camSpeed;
         playerSpeed = playerSpeed + 20;
       }
     });
   });
 
   onCollide("wall", "robbie", () => {
-    if (!isTouch()) {
+    // if (!isTouch()) {
       player.doubleJump(800);
-    } else {
-      player.move(0, 0);
-      player.frame = 0;
-      player.stop();
-    }
+    // } else {
+    //   player.move(0, 0);
+    //   player.frame = 0;
+    //   player.stop();
+    // }
   });
 
   //handle touch devices (WIP)
   if (isTouch()) {
+
+    add([
+      sprite("jumpBtn"),
+      pos(50, height()-10),
+      origin("bot"),
+      color(WHITE),
+      fixed(),
+      z(101)
+    ])
+
+    add([
+      sprite("jumpBtn"),
+      pos(width() - 50, height()-10),
+      origin("bot"),
+      color(WHITE),
+      fixed(),
+      z(101)
+
+    ])
+
     const cntrl = add([
       circle(20),
       pos(width() / 2, height() - 250),
