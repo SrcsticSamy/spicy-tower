@@ -276,17 +276,18 @@ scene("game", () => {
       circle(20),
       pos(width()/2, height()-170),
       origin("center"),
-      opacity(0),
+      opacity(1),
+      outline(5),
       fixed()
     ])
 
     
     onTouchMove((id, p)=>{
       if(p.x>0 && p.x<width() && p.y<height()-200 && p.y>0){
-        debug.log(`move:  ${id}`);
 
-        cntrl.pos.x = p.x-20         
-           
+        cntrl.pos.x = p.x         
+        cntrl.pos.y = p.y        
+
       }
       
     })
@@ -294,7 +295,6 @@ scene("game", () => {
     onTouchStart((id, p)=>{
 
       if(p.y>height()-100 && p.x<height()){
-        debug.log(`click:  ${id}`);
 
         if (player.isGrounded()) {
           player.jump(jumpPower);
@@ -302,8 +302,9 @@ scene("game", () => {
       }
     })
 
-    onTouchEnd(()=>{
+    onTouchEnd((id, p)=>{
       cntrl.pos.x = width()/2
+      cntrl.pos.y = p
       player.frame = 0
       player.stop()
     })
