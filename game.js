@@ -21,11 +21,11 @@ loadSprite("wall", "sprites/wall.png")
 
 scene("game", () => {
   let playerSpeed = 300;
-  let camSpeed = 120;
+  let camSpeed = 100;
   let jumpPower = 800;
-  let maxSpeed = isTouch()? 200 : 220
-  // load assets
+  let maxSpeed = isTouch()? 180 : 220
 
+  // load assets
   const score = add([
     text(`0`, { size: 30 }),
     pos(10, 10),
@@ -101,6 +101,7 @@ scene("game", () => {
       player.stop();
     }
   });
+
   //handle jump and fall animation
   player.onUpdate(() => {
     //check if falling to play animation
@@ -137,7 +138,7 @@ scene("game", () => {
 
   camObj.onUpdate(() => {
     wait(3, () => {
-      camObj.move(0, -camSpeed);
+      //camObj.move(0, -camSpeed);
     });
 
     camPos(camObj.pos);
@@ -261,6 +262,10 @@ scene("game", () => {
   onCollide("wall", "robbie", () => {
     if(!isTouch()){
       player.doubleJump(800);
+    } else {
+      player.move(0, 0)
+      player.frame = 0
+      player.stop()
     }
   });
 
@@ -301,24 +306,25 @@ scene("game", () => {
           player.move(0 ,0)
           player.frame = 0
           player.stop()
+          player.jump(0)
 
         }
+
+        onTouchMove(()=>{
+          debug.log("dragging")
+        })
+
+        if(isMouseDown()){
+          debug.log("done")
+        }
     }
-
     })
 
-
-    onTouchEnd(()=>{
-      debug.log("stopped")
-    })
-    
-    
 
     
     add([
       pos(width()/2 + width()/4, height()-50),
       origin("botleft"),
-      opacity(0.5),
       fixed(),
       sprite("rightBtn")
     ])
@@ -326,7 +332,6 @@ scene("game", () => {
     add([
       pos(width()/2, height()-50),
       origin("botleft"),
-      opacity(0.5),
       fixed(),
       sprite("leftBtn")
     ])
@@ -334,9 +339,8 @@ scene("game", () => {
     add([
       pos(width()/4, height()-50),
       origin("bot"),
-      opacity(0.5),
       fixed(),
-      sprite("jumpBtn")
+      sprite("jumpBtn"),
     ])
 
     
