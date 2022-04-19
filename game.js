@@ -276,13 +276,13 @@ scene("game", () => {
       circle(20),
       pos(width()/2, height()-170),
       origin("center"),
-      outline(5, ),
+      opacity(0),
       fixed()
     ])
 
     
     onTouchMove((id, p)=>{
-      if(p.x>0 && p.x<width() && p.y<height()-150 && p.y>height()-200){
+      if(p.x>0 && p.x<width() && p.y<height()-200 && p.y>0){
         debug.log(`move:  ${id}`);
 
         cntrl.pos.x = p.x-20         
@@ -292,8 +292,6 @@ scene("game", () => {
     })
 
     onTouchStart((id, p)=>{
-
-
 
       if(p.y>height()-100 && p.x<height()){
         debug.log(`click:  ${id}`);
@@ -333,10 +331,6 @@ scene("game", () => {
       
       
   })
-
-
-    
-    
 
     
   }
