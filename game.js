@@ -260,13 +260,13 @@ scene("game", () => {
   });
 
   onCollide("wall", "robbie", () => {
-    // if(!isTouch()){
+    if(!isTouch()){
       player.doubleJump(800);
-    // } else {
-    //   player.move(0, 0)
-    //   player.frame = 0
-    //   player.stop()
-    // }
+    } else {
+      player.move(0, 0)
+      player.frame = 0
+      player.stop()
+    }
   });
 
   //handle touch devices (WIP)
