@@ -1,5 +1,5 @@
 kaboom({
-  font: "sinko",
+  font: "sink",
 });
 
 loadSprite("robbie", "sprites/robbie.png", {
@@ -16,10 +16,12 @@ loadSprite("leftBtn", "sprites/left.png")
 loadSprite("rightBtn", "sprites/right.png")
 loadSprite("jumpBtn", "sprites/jump.png")
 
-loadSprite("wall", "sprites/wall.png")
-loadSprite("platform", "sprites/platform.png")
 
 loadSprite("bg", "sprites/bg.png")
+
+loadSprite("tile", "sprites/tile.png")
+loadSprite("wall", "sprites/wall.png")
+loadSprite("floor", "sprites/floor.png")
 
 
 scene("game", () => {
@@ -29,7 +31,7 @@ scene("game", () => {
   let maxSpeed = isTouch() ? 180 : 220;
 
   // load assets
-  add([ sprite("bg", {width: width(), height: height()}), fixed() ])
+  add([ sprite("bg", {width: isTouch()? 1024:width(), height: isTouch()? 1024:height()}), fixed(), pos(center()), origin("center") ])
 
   const score = add([
     text(`0`, { size: 30 }),
@@ -37,9 +39,10 @@ scene("game", () => {
     fixed(),
     z(50),
     { value: 0 },
+    color(BLACK)
   ]);
 
-  add([text(`Score`, { size: 20 }), pos(10, 50), fixed(), z(50)]);
+  add([text(`Score`, { size: 20 }), pos(10, 50), fixed(), z(50), color(BLACK)]);
 
 
   const speed = add([
@@ -47,10 +50,11 @@ scene("game", () => {
     pos(10, 100),
     fixed(),
     z(50),
-    { value: camSpeed },
+    color(BLACK)
+
   ]);
 
-  add([text(`Speed`, { size: 20 }), pos(10, 140), fixed(), z(50)]);
+  add([text(`Speed`, { size: 20 }), pos(10, 140), fixed(), z(50), color(BLACK)]);
 
 
   const fps = add([
@@ -167,35 +171,39 @@ scene("game", () => {
   //floor
 
   add([
-    rect(width(), 100),
+    sprite("floor", {tiled: true, width: width() , height:64}),
+
     pos(width()/2, height()),
     area(),
     solid(),
-    color(0, 0, 0),
-    z(5),
+    z(49),
     origin("bot"),
   ]);
 
   //left border
   add([
+    // sprite("wall", {tiled: true, width: width()/4 , height: height()}),
     rect(width() / 4, 10000 * height()),
     pos(0, height()),
     area(),
     solid(),
-    color(0, 0, 0),
     origin(isTouch() ? "botright" : "bot"),
-    z(10000),
+    z(49),
+    //fixed(),
     "wall",
   ]);
+  
   //right border
   add([
+    //sprite("wall", {tiled: true, width: width()/4 , height: height()}),
     rect(width() / 4, 10000 * height()),
+
     pos(width(), height()),
     area(),
     solid(),
-    color(0, 0, 0),
     origin(isTouch() ? "botleft" : "bot"),
-    z(10000),
+    z(49),
+    //fixed(),
     "wall",
   ]);
   //------------------------------------
@@ -207,15 +215,15 @@ scene("game", () => {
 
   function producePlatforms() {
     const newPlatform = add([
-      rect(isTouch()? width()/4 : width()/4 + 50 , 40),
+      sprite("tile", {tiled: true, width: isTouch()? width()/4 - 30 : width()/4 + 50, height: 64}),
+      scale(0.75),
       pos(
         width() / 2 + rand(-width() / 4, width() / 4),
         highestPlatformY - 180 //space between platforms
       ),
-      color(randi(10,200), randi(10,200), randi(10,200)),
       area(),
       origin("center"),
-      z(100),
+      z(48),
       { passed: false },
       "platform",
     ]);
@@ -372,17 +380,18 @@ scene("game", () => {
 
 
 scene("start", ()=>{
-  add([
-    sprite("bg", {width: width(), height: height()})
-  ])
+
+  add([ sprite("bg", {width: isTouch()? 1024:width(), height: isTouch()? 1024:height()}), fixed(), pos(center()), origin("center") ])
+
   
 
-  add([text("SPICY TOWER", { size: isTouch()? width()/10 : 80 }), pos(center()), origin("center")]);
+  add([text("SPICY TOWER", { size: isTouch()? width()/10 : 80 }), pos(center()), origin("center"), color(BLACK)]);
 
   add([
     text("Click any where to start playing.", { size: isTouch()? width()/20 : 30, width: width() / 1.5 }),
     pos(width() / 2, height() / 2 - 200),
     origin("center"),
+    color(BLACK)
   ]);
 
   const robbie = add([
@@ -414,9 +423,8 @@ scene("start", ()=>{
 //game over scene
 scene("lost", (score) => {
 
-  add([
-    sprite("bg", {width: width(), height: height()})
-  ])
+  add([ sprite("bg", {width: isTouch()? 1024:width(), height: isTouch()? 1024:height()}), fixed(), pos(center()), origin("center") ])
+
 
   let highScore = 0;
 
@@ -427,23 +435,26 @@ scene("lost", (score) => {
     setData("highScore", score.value);
   }
   add([
-    text("Click any where to play again.", { size: isTouch()? width()/20 : 30, width: width() / 2 }),
+    text("Click any where to play again.", { size: isTouch()? width()/20 : 30, width: width() / 1.5 }),
     pos(width() / 2, height() / 2 - 200),
     origin("center"),
+    color(BLACK)
   ]);
 
-  add([text("Game Over", { size: isTouch()? width()/10 : 80 }), pos(center()), origin("center")]);
+  add([text("Game Over", { size: isTouch()? width()/10 : 80 }), pos(center()), origin("center"), color(BLACK) ]);
 
   add([
     text(`Score: ${score.value}`, { size: isTouch()? width()/20 : 30 }),
     pos(width() / 2, height() / 2 + 100),
     origin("center"),
+    color(BLACK)
   ]);
 
   add([
     text(`Your Highest: ${highScore}`, { size: isTouch()? width()/20 : 30 }),
     pos(width() / 2, height() / 2 + 180),
     origin("center"),
+    color(BLACK)
   ]);
 
   onMousePress(() => {
