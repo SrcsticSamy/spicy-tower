@@ -45,7 +45,7 @@ scene("game", () => {
 
   const player = add([
     sprite("robbie", { anime: "idle" }),
-    pos(width() / 2, height()-500),
+    pos(width() / 2, height()-550),
     area(),
     body(),
     z(1000),
@@ -138,7 +138,7 @@ scene("game", () => {
 
   camObj.onUpdate(() => {
     wait(3, () => {
-      //camObj.move(0, -camSpeed);
+      camObj.move(0, -camSpeed);
     });
 
     camPos(camObj.pos);
@@ -272,67 +272,74 @@ scene("game", () => {
   //handle touch devices (WIP)
   if (isTouch()) {
 
+    
+
       onUpdate(()=>{
 
-      
-      if (mousePos().x > 0 && mousePos().x < width() && mousePos().y > 3*height()/4 && mousePos().y < height()) {
-        if (mousePos().x > width()/2 && mousePos().x < width()/2 + width()/4) { // left
+        
 
-          player.flipX(true);
-          player.move(-playerSpeed, 0);
-      
-          if (player.curAnim() !== "run") {
-            player.play("run");
-          }
-
-        }
-        else if (mousePos().x > width()/2 + width()/4) { // right
-          player.flipX(false);
-          player.move(playerSpeed, 0);
-      
-          if (player.curAnim() !== "run") {
-            player.play("run");
-          }
-
-        } 
-        // else if (mousePos().x < width()/2) {
-
-        //   if (player.isGrounded()) {
-        //     player.jump(jumpPower);
-        //   }
-
-        // }
-
-        else {
-          player.move(0 ,0)
-          player.frame = 0
-          player.stop()
-
-        }
-
-        onTouchMove(()=>{
-          debug.log(mousePos().x)
-          if (player.isGrounded()) {
-            player.jump(jumpPower);
-            player.move(0, 0)
+        onTouchMove((id, p)=>{
+          if(p.x>0 && p.x<width() && p.y<height() && p.y>0){
+            player.pos.x = p.x-20
+            if (player.isGrounded()) {
+              player.jump(jumpPower);
+            }
           }
         })
 
-        onTouchEnd(()=>{
-          //debug.log(mousePos().x)
-          player.frame = 0
-          player.stop()
-        })
-    }
-    })
+        
+
+
+      
+      // if (mousePos().x > 0 && mousePos().x < width() && mousePos().y > 3*height()/4 && mousePos().y < height()) {
+      //   if (mousePos().x > width()/2 && mousePos().x < width()/2 + width()/4) { // left
+
+      //     player.flipX(true);
+      //     player.move(-playerSpeed, 0);
+      
+      //     if (player.curAnim() !== "run") {
+      //       player.play("run");
+      //     }
+
+      //   }
+      //   else if (mousePos().x > width()/2 + width()/4) { // right
+
+      //     player.flipX(false);
+      //     player.move(playerSpeed, 0);
+      
+      //     if (player.curAnim() !== "run") {
+      //       player.play("run");
+      //     }
+
+      //   } 
+      //   else if (mousePos().x < width()/2) {
+
+      //     if (player.isGrounded()) {
+      //       player.jump(jumpPower);
+      //     }
+
+      //   }
+
+      //   else {
+      //     player.move(0 ,0)
+      //     player.frame = 0
+      //     player.stop()
+
+      //   }
+
+        
+
+    //}
+  })
 
 
     
     add([
       pos(width()/2 + width()/4, height()-50),
       origin("botleft"),
-      fixed(),
-      sprite("rightBtn")
+      fixed(),  
+      sprite("rightBtn"),
+      "leftbtn"
     ])
 
     add([
@@ -347,11 +354,11 @@ scene("game", () => {
       origin("bot"),
       fixed(),
       sprite("jumpBtn"),
+      
     ])
 
     
   }
-
 
 
 });
