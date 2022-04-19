@@ -23,7 +23,7 @@ scene("game", () => {
   let playerSpeed = 300;
   let camSpeed = 100;
   let jumpPower = 800;
-  let maxSpeed = isTouch()? 180 : 220
+  let maxSpeed = isTouch()? 160 : 220
 
   // load assets
   const score = add([
@@ -282,8 +282,9 @@ scene("game", () => {
 
     
     onTouchMove((id, p)=>{
-      debug.log(`move:  ${id}`);
-      if(p.x>0 && p.x<width() && p.y<height() && p.y>0){
+      if(p.x>0 && p.x<width() && p.y<height()-150 && p.y>height()-200){
+        debug.log(`move:  ${id}`);
+
         cntrl.pos.x = p.x-20         
            
       }
@@ -291,9 +292,12 @@ scene("game", () => {
     })
 
     onTouchStart((id, p)=>{
-      debug.log(`click:  ${id}`);
+
+
 
       if(p.y>height()-100 && p.x<height()){
+        debug.log(`click:  ${id}`);
+
         if (player.isGrounded()) {
           player.jump(jumpPower);
         }
@@ -327,71 +331,12 @@ scene("game", () => {
 
 
       
-      // if (mousePos().x > 0 && mousePos().x < width() && mousePos().y > 3*height()/4 && mousePos().y < height()) {
-      //   if (mousePos().x > width()/2 && mousePos().x < width()/2 + width()/4) { // left
-
-      //     player.flipX(true);
-      //     player.move(-playerSpeed, 0);
       
-      //     if (player.curAnim() !== "run") {
-      //       player.play("run");
-      //     }
-
-      //   }
-      //   else if (mousePos().x > width()/2 + width()/4) { // right
-
-      //     player.flipX(false);
-      //     player.move(playerSpeed, 0);
-      
-      //     if (player.curAnim() !== "run") {
-      //       player.play("run");
-      //     }
-
-      //   } 
-      //   else if (mousePos().x < width()/2) {
-
-      //     if (player.isGrounded()) {
-      //       player.jump(jumpPower);
-      //     }
-
-      //   }
-
-      //   else {
-      //     player.move(0 ,0)
-      //     player.frame = 0
-      //     player.stop()
-
-      //   }
-
-        
-
-    //}
   })
 
 
     
-    // add([
-    //   pos(width()/2 + width()/4, height()-50),
-    //   origin("botleft"),
-    //   fixed(),  
-    //   sprite("rightBtn"),
-    //   "leftbtn"
-    // ])
-
-    // add([
-    //   pos(width()/2, height()-50),
-    //   origin("botleft"),
-    //   fixed(),
-    //   sprite("leftBtn")
-    // ])
-
-    // add([
-    //   pos(width()/4, height()-50),
-    //   origin("bot"),
-    //   fixed(),
-    //   sprite("jumpBtn"),
-      
-    // ])
+    
 
     
   }
