@@ -294,24 +294,27 @@ scene("game", () => {
             player.play("run");
           }
 
-        } else if (mousePos().x < width()/2) {
+        } 
+        // else if (mousePos().x < width()/2) {
 
-          if (player.isGrounded()) {
-            player.jump(jumpPower);
-          }
+        //   if (player.isGrounded()) {
+        //     player.jump(jumpPower);
+        //   }
 
-        }
+        // }
 
         else {
           player.move(0 ,0)
           player.frame = 0
           player.stop()
-          player.jump(0)
 
         }
 
         onTouchMove(()=>{
           debug.log(mousePos().x)
+          if (player.isGrounded()) {
+            player.jump(jumpPower);
+          }
         })
 
         onTouchEnd(()=>{
