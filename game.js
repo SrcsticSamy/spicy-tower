@@ -15,6 +15,7 @@ loadSprite("robbie", "sprites/robbie.png", {
 loadSprite("leftBtn", "sprites/left.png")
 loadSprite("rightBtn", "sprites/right.png")
 loadSprite("jumpBtn", "sprites/jump.png")
+loadSprite("joystick", "sprites/joystick.png")
 
 
 loadSprite("bg", "sprites/bg.png")
@@ -26,9 +27,9 @@ loadSprite("floor", "sprites/floor.png")
 
 scene("game", () => {
   let playerSpeed = 300;
-  let camSpeed = 100;
+  let camSpeed = 110;
   let jumpPower = 800;
-  let maxSpeed = isTouch() ? 190 : 220;
+  let maxSpeed = isTouch() ? 180 : 200;
 
   // load assets
   add([ sprite("bg", {width: isTouch()? 1024:width(), height: isTouch()? 1024:height()}), fixed(), pos(center()), origin("center") ])
@@ -234,7 +235,7 @@ scene("game", () => {
   }
 
   //create first 10 platforms
-  for (let i = 0; i <= 10; i++) {
+  for (let i = 0; i <= 5; i++) {
     producePlatforms();
   }
 
@@ -278,7 +279,7 @@ scene("game", () => {
   });
 
   wait(3, () => {
-    loop(0.75, () => {
+    loop(0.8, () => {
       producePlatforms();
     });
 
@@ -325,14 +326,17 @@ scene("game", () => {
     ])
 
     const cntrl = add([
-      circle(20),
+      sprite("joystick"),
+      scale(0.5),
       pos(width() / 2, height() - 250),
       origin("center"),
-      opacity(1),
+      opacity(0.75),
       outline(5),
       fixed(),
     ]);
 
+
+    let currentJoystickPos;
 
     onTouchMove((id, p) => {
       if (p.x > 0 && p.x < width() && p.y < height() - 200 && p.y > 0) {
@@ -351,21 +355,22 @@ scene("game", () => {
     });
 
     //reset animation and control thingy
-    onTouchEnd(() => {
-      cntrl.pos.x = width() / 2;
+    onTouchEnd((id, p) => {
+      cntrl.pos.x = p.x;
+      currentJoystickPos = p.x;
       player.frame = 0;
       player.stop();
     });
 
     onUpdate(() => {
-      if (cntrl.pos.x > width() / 2) { //run right
+      if (cntrl.pos.x > currentJoystickPos) { //run right
         player.flipX(false);
         player.move(playerSpeed, 0);
 
         if (player.curAnim() !== "run") {
           player.play("run");
         }
-      } else if (cntrl.pos.x < width() / 2) { //run left
+      } else if (cntrl.pos.x < currentJoystickPos) { //run left
         player.flipX(true);
         player.move(-playerSpeed, 0);
 
