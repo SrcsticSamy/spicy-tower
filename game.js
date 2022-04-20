@@ -356,21 +356,20 @@ scene("game", () => {
 
     //reset animation and control thingy
     onTouchEnd((id, p) => {
-      cntrl.pos.x = p.x;
-      currentJoystickPos = p.x;
+      cntrl.pos.x = width()/2;
       player.frame = 0;
       player.stop();
     });
 
     onUpdate(() => {
-      if (cntrl.pos.x > currentJoystickPos) { //run right
+      if (cntrl.pos.x > width()/2) { //run right
         player.flipX(false);
         player.move(playerSpeed, 0);
 
         if (player.curAnim() !== "run") {
           player.play("run");
         }
-      } else if (cntrl.pos.x < currentJoystickPos) { //run left
+      } else if (cntrl.pos.x < width()/2) { //run left
         player.flipX(true);
         player.move(-playerSpeed, 0);
 
