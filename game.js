@@ -28,7 +28,7 @@ scene("game", () => {
   let playerSpeed = 300;
   let camSpeed = 100;
   let jumpPower = 800;
-  let maxSpeed = isTouch() ? 180 : 220;
+  let maxSpeed = isTouch() ? 190 : 220;
 
   // load assets
   add([ sprite("bg", {width: isTouch()? 1024:width(), height: isTouch()? 1024:height()}), fixed(), pos(center()), origin("center") ])
