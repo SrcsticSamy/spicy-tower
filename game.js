@@ -354,7 +354,7 @@ scene("game", () => {
     let currentJoystickPos;
 
     onTouchMove((id, p) => {
-      if (p.x > 0 && p.x < width() && p.y < height() - 200 && p.y > 0) {
+      if (p.x > 0 && p.x < width() && p.y < height() - 150 && p.y > 0) {
         cntrl.pos.x = p.x;
         cntrl.pos.y = p.y;
       }
