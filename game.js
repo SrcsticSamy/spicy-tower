@@ -267,9 +267,10 @@ scene("game", () => {
   //----------------------------------------
 
   const countdown = add([
-    text("3", { size: width()/10, font: "apl386o" }),
+    text("3", { size: width()/8, font: "apl386o" }),
     pos(width() / 2, height() / 2 - 200),
     origin("center"),
+    z(1000),
     { value: 3 },
   ]);
 
@@ -362,6 +363,7 @@ scene("game", () => {
     onTouchStart((id, p) => {
       if (p.y > height() - 100 && p.x < height()) {
         if (player.isGrounded()) {
+          play("jump")
           player.jump(jumpPower);
         }
       }
