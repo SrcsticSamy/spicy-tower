@@ -17,9 +17,7 @@ loadSprite("rightBtn", "sprites/right.png")
 loadSprite("jumpBtn", "sprites/jump.png")
 loadSprite("joystick", "sprites/joystick.png")
 
-
 loadSprite("bg", "sprites/bg.png")
-
 loadSprite("tile", "sprites/tile.png")
 loadSprite("wall", "sprites/wall.png")
 loadSprite("floor", "sprites/floor.png")
@@ -27,9 +25,9 @@ loadSprite("floor", "sprites/floor.png")
 
 scene("game", () => {
   let playerSpeed = 300;
-  let camSpeed = 110;
+  let camSpeed = 100;
   let jumpPower = 800;
-  let maxSpeed = isTouch() ? 180 : 200;
+  let maxSpeed = isTouch() ? 200 : 200;
 
   // load assets
   add([ sprite("bg", {width: isTouch()? 1024:width(), height: isTouch()? 1024:height()}), fixed(), pos(center()), origin("center") ])
@@ -294,13 +292,8 @@ scene("game", () => {
   });
 
   onCollide("wall", "robbie", () => {
-    // if (!isTouch()) {
       player.doubleJump(800);
-    // } else {
-    //   player.move(0, 0);
-    //   player.frame = 0;
-    //   player.stop();
-    // }
+
   });
 
   //handle touch devices (WIP)
@@ -347,6 +340,7 @@ scene("game", () => {
 
     //handle jump when lower part of screen is pressed
     onTouchStart((id, p) => {
+      cntrl.pos.x = p.x
       if (p.y > height() - 100 && p.x < height()) {
         if (player.isGrounded()) {
           player.jump(jumpPower);
@@ -356,20 +350,21 @@ scene("game", () => {
 
     //reset animation and control thingy
     onTouchEnd((id, p) => {
-      cntrl.pos.x = width()/2;
+      currentJoystickPos = p.x
+      cntrl.pos.x = p.x
       player.frame = 0;
       player.stop();
     });
 
     onUpdate(() => {
-      if (cntrl.pos.x > width()/2) { //run right
+      if (cntrl.pos.x > currentJoystickPos) { //run right
         player.flipX(false);
         player.move(playerSpeed, 0);
 
         if (player.curAnim() !== "run") {
           player.play("run");
         }
-      } else if (cntrl.pos.x < width()/2) { //run left
+      } else if (cntrl.pos.x < currentJoystickPos) { //run left
         player.flipX(true);
         player.move(-playerSpeed, 0);
 
