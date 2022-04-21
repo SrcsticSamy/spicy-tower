@@ -22,6 +22,8 @@ loadSprite("tile", "sprites/tile.png")
 loadSprite("wall", "sprites/wall.png")
 loadSprite("floor", "sprites/floor.png")
 
+loadSprite("logo", "sprites/my-logo.png")
+
 loadSound("theme", "./audio/theme2.wav")
 loadSound("jump", "./audio/jump.wav")
 loadSound("lost", "./audio/lost.wav")
@@ -437,6 +439,12 @@ scene("start", ()=>{
       go("game")
     })
   }
+
+  add([text("Made By", {size: 20}), pos(width()/2, height()-150), origin("center"), color(WHITE)]);
+
+  add([circle(40), pos(width()/2, height()-100), origin("center"), color(BLACK), opacity(0.2)]);
+  add([ sprite("logo"), scale(0.2), pos(width()/2, height()-100), origin("center"),]);
+
 
 })
 
