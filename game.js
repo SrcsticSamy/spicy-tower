@@ -1,5 +1,5 @@
-kaboom({
-  font: "sink",
+const k = kaboom({
+  font: "apl386",
 });
 
 loadSprite("robbie", "sprites/robbie.png", {
@@ -11,12 +11,10 @@ loadSprite("robbie", "sprites/robbie.png", {
     cheer: {from: 7, to: 8}
   },
 });
+loadSprite("jmpEffect", "sprites/jmpeffect.png")
 
-loadSprite("leftBtn", "sprites/left.png")
-loadSprite("rightBtn", "sprites/right.png")
 loadSprite("jumpBtn", "sprites/jump.png")
 loadSprite("joystick", "sprites/joystick.png")
-
 
 loadSprite("bg", "sprites/bg.png")
 
@@ -24,12 +22,19 @@ loadSprite("tile", "sprites/tile.png")
 loadSprite("wall", "sprites/wall.png")
 loadSprite("floor", "sprites/floor.png")
 
+loadSound("theme", "./audio/theme2.wav")
+loadSound("jump", "./audio/jump.wav")
+loadSound("lost", "./audio/lost.wav")
+
+const music = play("theme", {loop: true, volume: 0.15})
 
 scene("game", () => {
   let playerSpeed = 300;
   let camSpeed = 110;
   let jumpPower = 800;
-  let maxSpeed = isTouch() ? 200 : 200;
+  let maxSpeed = 210;
+
+  music.play()
 
   // load assets
   add([ sprite("bg", {width: isTouch()? 1024:width(), height: isTouch()? 1024:height()}), fixed(), pos(center()), origin("center") ])
@@ -113,6 +118,7 @@ scene("game", () => {
   //jump if grounded
   onKeyPress("space", () => {
     if (player.isGrounded()) {
+      play("jump")
       player.jump(jumpPower);
     }
   });
@@ -163,17 +169,14 @@ scene("game", () => {
     wait(3, () => {
       camObj.move(0, -camSpeed);
     });
-
     camPos(camObj.pos);
   });
   //----------------------------------------
 
   //----------------Borders-------------
   //floor
-
   add([
     sprite("floor", {tiled: true, width: width() , height:64}),
-
     pos(width()/2, height()),
     area(),
     solid(),
@@ -183,28 +186,29 @@ scene("game", () => {
 
   //left border
   add([
-    // sprite("wall", {tiled: true, width: width()/4 , height: height()}),
     rect(width() / 4, 10000 * height()),
     pos(0, height()),
     area(),
     solid(),
+    opacity(0.25),
+    outline(2),
     origin(isTouch() ? "botright" : "bot"),
     z(49),
-    //fixed(),
+    fixed(),
     "wall",
   ]);
   
   //right border
   add([
-    //sprite("wall", {tiled: true, width: width()/4 , height: height()}),
     rect(width() / 4, 10000 * height()),
-
     pos(width(), height()),
     area(),
     solid(),
     origin(isTouch() ? "botleft" : "bot"),
     z(49),
-    //fixed(),
+    opacity(0.25),
+    outline(2),
+    fixed(),
     "wall",
   ]);
   //------------------------------------
@@ -263,7 +267,7 @@ scene("game", () => {
   //----------------------------------------
 
   const countdown = add([
-    text("3", { size: 100 }),
+    text("3", { size: width()/10, font: "apl386o" }),
     pos(width() / 2, height() / 2 - 200),
     origin("center"),
     { value: 3 },
@@ -294,13 +298,22 @@ scene("game", () => {
   });
 
   onCollide("wall", "robbie", () => {
-    // if (!isTouch()) {
+
+    if(!player.isFalling()){
+      const effect = add([
+        sprite("jmpEffect"),
+        pos(player.pos),
+        origin("center")
+      ])
+
+      wait(0.25, ()=>{
+        destroy(effect)
+      })
+    }
+    
       player.doubleJump(800);
-    // } else {
-    //   player.move(0, 0);
-    //   player.frame = 0;
-    //   player.stop();
-    // }
+      
+      
   });
 
   //handle touch devices (WIP)
@@ -389,7 +402,7 @@ scene("start", ()=>{
 
   
 
-  add([text("SPICY TOWER", { size: isTouch()? width()/10 : 80 }), pos(center()), origin("center"), color(BLACK)]);
+  add([text("SPICY TOWER", { size: isTouch()? width()/10 : 80, font: "apl386o" }), pos(center()), origin("center"), color(WHITE)]);
 
   add([
     text("Click any where to start playing.", { size: isTouch()? width()/20 : 30, width: width() / 1.5 }),
@@ -427,6 +440,10 @@ scene("start", ()=>{
 //game over scene
 scene("lost", (score) => {
 
+
+  music.pause()
+  play("lost")
+
   add([ sprite("bg", {width: isTouch()? 1024:width(), height: isTouch()? 1024:height()}), fixed(), pos(center()), origin("center") ])
 
 
@@ -445,7 +462,7 @@ scene("lost", (score) => {
     color(BLACK)
   ]);
 
-  add([text("Game Over", { size: isTouch()? width()/10 : 80 }), pos(center()), origin("center"), color(BLACK) ]);
+  add([text("Game Over", { size: isTouch()? width()/10 : 80, font :"apl386o" }), pos(center()), origin("center"), color(RED) ]);
 
   add([
     text(`Score: ${score.value}`, { size: isTouch()? width()/20 : 30 }),
