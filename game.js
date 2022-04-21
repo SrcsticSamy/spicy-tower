@@ -29,12 +29,13 @@ loadSound("lost", "./audio/lost.wav")
 const music = play("theme", {loop: true, volume: 0.15})
 
 scene("game", () => {
+  music.pause()
+
   let playerSpeed = 300;
   let camSpeed = 110;
   let jumpPower = 800;
   let maxSpeed = 210;
 
-  music.play()
 
   // load assets
   add([ sprite("bg", {width: isTouch()? 1024:width(), height: isTouch()? 1024:height()}), fixed(), pos(center()), origin("center") ])
@@ -399,6 +400,8 @@ scene("game", () => {
 
 
 scene("start", ()=>{
+
+  music.play()
 
   add([ sprite("bg", {width: isTouch()? 1024:width(), height: isTouch()? 1024:height()}), fixed(), pos(center()), origin("center") ])
 
