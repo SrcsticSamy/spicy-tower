@@ -223,7 +223,7 @@ scene("game", () => {
 
   function producePlatforms() {
     const newPlatform = add([
-      sprite("tile", {tiled: true, width: isTouch()? width()/4 - 30 : width()/4 + 50, height: 64}),
+      sprite("tile", {tiled: true, width: isTouch()? width()/4 - 30 : width()/4 + 80, height: 64}),
       scale(0.75),
       pos(
         width() / 2 + rand(-width() / 4, width() / 4),
